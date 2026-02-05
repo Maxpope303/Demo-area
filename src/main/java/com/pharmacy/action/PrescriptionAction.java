@@ -131,6 +131,7 @@ public class PrescriptionAction extends ActionSupport {
     }
     
     public String getPatientId() {
+        
         return patientId;
     }
     

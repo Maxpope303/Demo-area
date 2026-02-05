@@ -16,6 +16,10 @@
             <result name="success">/WEB-INF/content/dashboard.jsp</result>
         </action>
         
+        <action name="logout" class="com.pharmacy.action.DashboardAction" method="logout">
+            <result name="success">/WEB-INF/content/logout.jsp</result>
+        </action>
+        
         <!-- Prescription Actions -->
         <action name="prescription-list" class="com.pharmacy.action.PrescriptionAction" method="list">
             <result name="success">/WEB-INF/content/prescription-list.jsp</result>

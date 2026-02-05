@@ -50,6 +50,15 @@
             <version>2.3.1</version>
             <scope>provided</scope>
         </dependency>
+       
+        <!-- WAS API (provided by WebSphere) -->
+        <dependency>
+            <groupId>com.ibm.websphere.appserver</groupId>
+            <artifactId>was_public</artifactId>
+            <version>9.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+
 
         <!-- JSTL -->
         <dependency>

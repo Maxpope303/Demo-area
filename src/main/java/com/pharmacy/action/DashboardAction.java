@@ -1,14 +1,32 @@
 package com.pharmacy.action;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.lang3.ObjectUtils.Null;
+import org.apache.struts2.ServletActionContext;
+import org.apache.struts2.interceptor.SessionAware;
+
+import com.ibm.websphere.security.WSSecurityHelper;
 import com.opensymphony.xwork2.ActionSupport;
 import com.pharmacy.model.Order;
 import com.pharmacy.model.Prescription;
 import com.pharmacy.repository.OrderRepository;
 import com.pharmacy.repository.PrescriptionRepository;
-import java.util.List;
 
-public class DashboardAction extends ActionSupport {
+
+
+public class DashboardAction extends ActionSupport implements SessionAware {
     private static final long serialVersionUID = 1L;
+    
+    private Map<String, Object> session;
     
     private List<Prescription> pendingPrescriptions;
     private List<Order> pendingOrders;
@@ -47,6 +65,29 @@ public class DashboardAction extends ActionSupport {
     
     public int getTotalOrders() {
         return totalOrders;
+    }
+    
+
+    public String logout() {
+        HttpServletRequest request=ServletActionContext.getRequest();
+        HttpServletResponse response=ServletActionContext.getResponse();
+
+        try {
+            WSSecurityHelper.revokeSSOCookies(request, response);
+        } catch (Exception e) {
+            System.err.println("[ERROR] Error logging out");
+            e.printStackTrace();
+        }
+
+        // Add a message
+        addActionMessage("You have been successfully logged out !!!");
+        System.out.println("Logout successfull");
+        return SUCCESS;
+    }
+    
+    @Override
+    public void setSession(Map<String, Object> session) {
+        this.session = session;
     }
 }
 

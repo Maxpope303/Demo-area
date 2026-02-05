@@ -34,6 +34,12 @@
             padding: 15px;
             margin: -20px -20px 20px -20px;
             border-radius: 8px 8px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav-links {
+            display: flex;
         }
         .nav a {
             color: white;
@@ -45,6 +51,13 @@
         }
         .nav a:hover {
             background-color: #2980b9;
+        }
+        .nav .logout-btn {
+            background-color: #e74c3c;
+            margin-right: 0;
+        }
+        .nav .logout-btn:hover {
+            background-color: #c0392b;
         }
         .search-form {
             margin-bottom: 20px;
@@ -98,10 +111,13 @@
 <body>
     <div class="container">
         <div class="nav">
-            <a href="<s:url action='dashboard'/>">Dashboard</a>
-            <a href="<s:url action='prescription-list'/>">Prescriptions</a>
-            <a href="<s:url action='order-list'/>">Orders</a>
-            <a href="<s:url action='medicine-list'/>">Medicines</a>
+            <div class="nav-links">
+                <a href="<s:url action='dashboard'/>">Dashboard</a>
+                <a href="<s:url action='prescription-list'/>">Prescriptions</a>
+                <a href="<s:url action='order-list'/>">Orders</a>
+                <a href="<s:url action='medicine-list'/>">Medicines</a>
+            </div>
+            <a href="<s:url action='logout'/>" class="logout-btn">Logout</a>
         </div>
         
         <h1>Medicines Inventory</h1>
