@@ -1,9 +1,11 @@
 package com.pharmacy.action;
 
+import com.ibm.websphere.servlet.response.ResponseUtils;
 import com.opensymphony.xwork2.ActionSupport;
 import com.pharmacy.model.Medicine;
 import com.pharmacy.repository.MedicineRepository;
 import java.util.List;
+import com.ibm.websphere.servlet.response.ResponseUtils;
 
 public class MedicineAction extends ActionSupport {
     private static final long serialVersionUID = 1L;
@@ -42,6 +44,7 @@ public class MedicineAction extends ActionSupport {
     
     // Getters and Setters
     public String getMedicineId() {
+        medicineId = ResponseUtils.encodeDataString(medicineId);
         return medicineId;
     }
     
