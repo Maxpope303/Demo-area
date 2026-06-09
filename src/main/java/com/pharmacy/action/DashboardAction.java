@@ -4,17 +4,13 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.ObjectUtils.Null;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.interceptor.SessionAware;
 
-import com.ibm.websphere.security.WSSecurityHelper;
 import com.opensymphony.xwork2.ActionSupport;
 import com.pharmacy.model.Order;
 import com.pharmacy.model.Prescription;
@@ -73,7 +69,7 @@ public class DashboardAction extends ActionSupport implements SessionAware {
         HttpServletResponse response=ServletActionContext.getResponse();
 
         try {
-            WSSecurityHelper.revokeSSOCookies(request, response);
+            request.logout();
         } catch (Exception e) {
             System.err.println("[ERROR] Error logging out");
             e.printStackTrace();

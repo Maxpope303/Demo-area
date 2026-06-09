@@ -1,11 +1,11 @@
 package com.pharmacy.action;
 
-import com.ibm.websphere.servlet.response.ResponseUtils;
 import com.opensymphony.xwork2.ActionSupport;
 import com.pharmacy.model.Medicine;
 import com.pharmacy.repository.MedicineRepository;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.List;
-import com.ibm.websphere.servlet.response.ResponseUtils;
 
 public class MedicineAction extends ActionSupport {
     private static final long serialVersionUID = 1L;
@@ -44,7 +44,14 @@ public class MedicineAction extends ActionSupport {
     
     // Getters and Setters
     public String getMedicineId() {
-        medicineId = ResponseUtils.encodeDataString(medicineId);
+        if (medicineId != null) {
+            try {
+                medicineId = URLEncoder.encode(medicineId, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                // UTF-8 is always supported, this should never happen
+                throw new RuntimeException("UTF-8 encoding not supported", e);
+            }
+        }
         return medicineId;
     }
     
