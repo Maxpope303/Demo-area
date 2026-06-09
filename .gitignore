@@ -21,6 +21,9 @@ buildNumber.properties
 *.rar
 hs_err_pid*
 
+# Exception: Allow WebSphere dependency JAR files
+!was_dependency/*.jar
+
 # IDE
 .idea/
 *.iml
