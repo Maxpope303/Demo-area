@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd">
+    <!-- 
+        OWASP Dependency Check Suppressions
+        
+        This file contains suppressions for known false positives or accepted risks.
+        Review and update regularly as part of security maintenance.
+    -->
+    
+    <!-- Example: Suppress false positives for specific CVEs -->
+    <!--
+    <suppress>
+        <notes><![CDATA[
+        False positive - this vulnerability does not apply to our usage
+        ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.apache\.struts/struts2\-core@.*$</packageUrl>
+        <cve>CVE-XXXX-XXXXX</cve>
+    </suppress>
+    -->
+    
+    <!-- Suppress WebSphere provided dependencies -->
+    <suppress>
+        <notes><![CDATA[
+        WebSphere provided dependencies are managed by the application server
+        ]]></notes>
+        <packageUrl regex="true">^pkg:maven/com\.ibm\.websphere\.appserver/.*$</packageUrl>
+    </suppress>
+    
+    <!-- Suppress servlet API as it's provided by container -->
+    <suppress>
+        <notes><![CDATA[
+        Servlet API is provided by the application server
+        ]]></notes>
+        <packageUrl regex="true">^pkg:maven/javax\.servlet/.*$</packageUrl>
+    </suppress>
+
+</suppressions>
+
+<!-- Made with Bob -->

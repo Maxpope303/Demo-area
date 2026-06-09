@@ -42,5 +42,32 @@ bin/
 ehthumbs.db
 Thumbs.db
 
-# Docker
+# Docker/Podman
 *.log
+simple-pharmacy-image.tar
+
+# Test Reports
+**/surefire-reports/
+**/failsafe-reports/
+**/test-output/
+
+# Coverage Reports
+**/jacoco.exec
+**/jacoco/
+
+# Security Reports
+**/dependency-check-report.html
+**/spotbugsXml.xml
+trivy-results.sarif
+
+# Build artifacts
+*.tar
+*.tgz
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*~
+
+# Made with Bob
