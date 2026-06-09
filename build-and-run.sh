@@ -18,20 +18,34 @@ if ! command -v mvn &> /dev/null; then
     exit 1
 fi
 
-# Check if Docker is installed
-if ! command -v docker &> /dev/null; then
-    echo "ERROR: Docker is not installed. Please install Docker first."
+# Check if Docker or Podman is installed
+if command -v docker &> /dev/null; then
+    CONTAINER_CMD="docker"
+    COMPOSE_CMD="docker-compose"
+elif command -v podman &> /dev/null; then
+    CONTAINER_CMD="podman"
+    # Check if podman-compose is available
+    if command -v podman-compose &> /dev/null; then
+        COMPOSE_CMD="podman-compose"
+    else
+        echo "WARNING: podman-compose not found. Will use podman directly."
+        COMPOSE_CMD="podman"
+    fi
+    echo "Using Podman as container runtime"
+else
+    echo "ERROR: Neither Docker nor Podman is installed."
     echo ""
     echo "Options:"
     echo "  - Rancher Desktop: https://rancherdesktop.io/"
     echo "  - Docker Desktop: https://www.docker.com/products/docker-desktop"
+    echo "  - Podman: https://podman.io/getting-started/installation"
     echo ""
     exit 1
 fi
 
-# Check if Docker daemon is running
-if ! docker info &> /dev/null; then
-    echo "ERROR: Docker daemon is not running."
+# Check if container daemon is running
+if ! $CONTAINER_CMD info &> /dev/null; then
+    echo "ERROR: Container runtime is not running."
     echo ""
     echo "Please start your Docker environment:"
     echo ""
@@ -53,7 +67,7 @@ if ! docker info &> /dev/null; then
     exit 1
 fi
 
-echo "Docker daemon is running ✓"
+echo "Container runtime is running ✓"
 echo ""
 
 echo "Step 1: Cleaning previous builds..."
@@ -84,7 +98,7 @@ else
 fi
 
 # Try to pull the base image first with better error handling
-if ! docker pull $PLATFORM_FLAG ibmcom/websphere-traditional:latest 2>&1 | tee /tmp/docker-pull.log; then
+if ! $CONTAINER_CMD pull $PLATFORM_FLAG ibmcom/websphere-traditional:latest 2>&1 | tee /tmp/docker-pull.log; then
     echo ""
     echo "WARNING: Failed to pull WebSphere image from Docker Hub."
     echo "This could be due to:"
@@ -105,12 +119,18 @@ if ! docker pull $PLATFORM_FLAG ibmcom/websphere-traditional:latest 2>&1 | tee /
 fi
 
 echo ""
-echo "Step 4: Building Docker image..."
-docker build -t simple-pharmacy:latest .
+echo "Step 4: Building container image..."
+$CONTAINER_CMD build -t simple-pharmacy:latest .
 
 echo ""
-echo "Step 5: Starting application with Docker Compose..."
-docker-compose up -d
+echo "Step 5: Starting application..."
+if [ "$COMPOSE_CMD" = "podman-compose" ] || [ "$COMPOSE_CMD" = "docker-compose" ]; then
+    $COMPOSE_CMD up -d
+else
+    # Use podman directly without compose
+    echo "Note: Using podman directly (compose not available)"
+    $CONTAINER_CMD run -d --name simple-pharmacy -p 9060:9060 -p 9080:9080 -p 9043:9043 -p 9443:9443 simple-pharmacy:latest
+fi
 
 echo ""
 echo "=========================================="

@@ -11,6 +11,19 @@
     
     <package name="pharmacy" extends="struts-default">
         
+        <!-- Default action for root path -->
+        <default-action-ref name="dashboard" />
+        
+        <!-- Index action -->
+        <action name="index">
+            <result type="redirect">dashboard</result>
+        </action>
+        
+        <!-- Empty action name handler -->
+        <action name="">
+            <result type="redirect">dashboard</result>
+        </action>
+        
         <!-- Dashboard Actions -->
         <action name="dashboard" class="com.pharmacy.action.DashboardAction">
             <result name="success">/WEB-INF/content/dashboard.jsp</result>
