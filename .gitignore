@@ -14,6 +14,7 @@ buildNumber.properties
 *.class
 *.log
 *.jar
+!was_dependency/*.jar
 *.war
 *.ear
 *.zip
