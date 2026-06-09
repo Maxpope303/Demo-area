@@ -65,6 +65,12 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
+      - name: Install WebSphere dependency
+        run: |
+          mvn install:install-file \
+            -Dfile=was_dependency/was_public-9.0.0.jar \
+            -DpomFile=was_dependency/was_public-9.0.0.pom
+
       - name: Build with Maven
         run: mvn clean compile -B
 
