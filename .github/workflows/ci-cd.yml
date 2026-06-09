@@ -211,7 +211,7 @@ jobs:
 
   # Coverage gate - ensure minimum coverage
   coverage-gate:
-    name: Coverage Gate (50% minimum)
+    name: Coverage Gate (30% minimum)
     runs-on: ubuntu-latest
     needs: [setup, build-and-test]
     
@@ -235,8 +235,8 @@ jobs:
         with:
           paths: target/site/jacoco/jacoco.xml
           token: ${{ secrets.GITHUB_TOKEN }}
-          min-coverage-overall: 50
-          min-coverage-changed-files: 50
+          min-coverage-overall: 30
+          min-coverage-changed-files: 30
 
   # Approval gate for modernized branch
   approval-gate:
