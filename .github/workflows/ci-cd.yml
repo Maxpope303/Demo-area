@@ -17,7 +17,6 @@ env:
   MAVEN_OPTS: -Xmx1024m
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}/simple-pharmacy
-  SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
 jobs:
   # Determine Java version based on branch
@@ -119,132 +118,6 @@ jobs:
           name: simple-pharmacy-java${{ needs.setup.outputs.java-version }}
           path: target/*.war
           retention-days: 30
-
-      - name: Notify Slack - Build Success
-        if: success()
-        uses: slackapi/slack-github-action@v1.26.0
-        with:
-          payload: |
-            {
-              "text": "✅ Build & Test Successful",
-              "blocks": [
-                {
-                  "type": "header",
-                  "text": {
-                    "type": "plain_text",
-                    "text": "✅ Build & Test Passed"
-                  }
-                },
-                {
-                  "type": "section",
-                  "fields": [
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Repository:*\n${{ github.repository }}"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Branch:*\n${{ github.ref_name }}"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Java Version:*\n${{ needs.setup.outputs.java-version }}"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Triggered by:*\n${{ github.actor }}"
-                    }
-                  ]
-                },
-                {
-                  "type": "actions",
-                  "elements": [
-                    {
-                      "type": "button",
-                      "text": {
-                        "type": "plain_text",
-                        "text": "View Workflow"
-                      },
-                      "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-                    },
-                    {
-                      "type": "button",
-                      "text": {
-                        "type": "plain_text",
-                        "text": "View Commit"
-                      },
-                      "url": "${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}"
-                    }
-                  ]
-                }
-              ]
-            }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
-
-      - name: Notify Slack - Build Failure
-        if: failure()
-        uses: slackapi/slack-github-action@v1.26.0
-        with:
-          payload: |
-            {
-              "text": "❌ Build & Test Failed",
-              "blocks": [
-                {
-                  "type": "header",
-                  "text": {
-                    "type": "plain_text",
-                    "text": "❌ Build & Test Failed"
-                  }
-                },
-                {
-                  "type": "section",
-                  "fields": [
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Repository:*\n${{ github.repository }}"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Branch:*\n${{ github.ref_name }}"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Java Version:*\n${{ needs.setup.outputs.java-version }}"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Triggered by:*\n${{ github.actor }}"
-                    }
-                  ]
-                },
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "⚠️ *Action Required:* Check the workflow logs for details"
-                  }
-                },
-                {
-                  "type": "actions",
-                  "elements": [
-                    {
-                      "type": "button",
-                      "text": {
-                        "type": "plain_text",
-                        "text": "View Logs"
-                      },
-                      "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
-                      "style": "danger"
-                    }
-                  ]
-                }
-              ]
-            }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
 
   # Code quality and security analysis
   code-quality:
@@ -374,68 +247,6 @@ jobs:
           echo ""
           echo "Deployment approved by: ${{ github.actor }}"
           echo "Timestamp: $(date -u +"%Y-%m-%d %H:%M:%S UTC")"
-
-      - name: Notify Slack - Deployment Approved
-        uses: slackapi/slack-github-action@v1.26.0
-        with:
-          payload: |
-            {
-              "text": "🚀 Production Deployment Approved",
-              "blocks": [
-                {
-                  "type": "header",
-                  "text": {
-                    "type": "plain_text",
-                    "text": "🚀 Production Deployment Approved"
-                  }
-                },
-                {
-                  "type": "section",
-                  "fields": [
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Repository:*\n${{ github.repository }}"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Branch:*\nmodernized"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Approved by:*\n${{ github.actor }}"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Java Version:*\n17"
-                    }
-                  ]
-                },
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "✅ All checks passed:\n• Build: Success\n• Tests: Passed\n• Security: Scanned\n• Container: Built\n• Coverage: Met threshold"
-                  }
-                },
-                {
-                  "type": "actions",
-                  "elements": [
-                    {
-                      "type": "button",
-                      "text": {
-                        "type": "plain_text",
-                        "text": "View Deployment"
-                      },
-                      "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
-                      "style": "primary"
-                    }
-                  ]
-                }
-              ]
-            }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
 
   # Summary report
   pipeline-summary:
