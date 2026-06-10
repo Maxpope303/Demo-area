@@ -130,8 +130,15 @@ public class PrescriptionRepositoryTest {
     
     @Test
     public void testFindByPatientIdNoResults() {
+        // Given - ensure P99999 has no prescriptions (cleanup any leftover test data)
+        String testPatientId = "P99999";
+        List<Prescription> existingPrescriptions = repository.findByPatientId(testPatientId);
+        for (Prescription p : existingPrescriptions) {
+            repository.deletePrescription(p.getId());
+        }
+        
         // When
-        List<Prescription> prescriptions = repository.findByPatientId("P99999");
+        List<Prescription> prescriptions = repository.findByPatientId(testPatientId);
         
         // Then
         assertThat(prescriptions).isNotNull();
